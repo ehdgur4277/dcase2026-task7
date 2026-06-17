@@ -1,0 +1,126 @@
+# Submission information
+submission:
+  # Submission label
+  label: Chun_Chosun_task7_4
+
+  # Submission name
+  name: DCASE2026 Challenge Task 7 CovForget K-Fold Ensemble system (gain aug off for baby_cry/telephone)
+
+  # Submission name abbreviated (max 10 chars)
+  abbreviation: CovForgetG
+
+  # Authors
+  authors:
+    - firstname: Chun
+      lastname: Chanjun
+      email: cjchun@chosun.ac.kr
+      corresponding: true
+      affiliation:
+        institution: Chosun University
+        department: Department of Computer Engineering
+        location: Gwangju, Republic of Korea
+
+    - firstname: Kim
+      lastname: Hanseul
+      email: khs020512@chosun.ac.kr
+      affiliation:
+        institution: Chosun University
+        department: Department of Computer Engineering
+        location: Gwangju, Republic of Korea
+
+    - firstname: Kim
+      lastname: Eojin
+      email: jjj333@chosun.ac.kr
+      affiliation:
+        institution: Chosun University
+        department: Department of Computer Engineering
+        location: Gwangju, Republic of Korea
+
+    - firstname: Lee
+      lastname: Jihyuk
+      email: dlwlgur02@chosun.ac.kr
+      affiliation:
+        institution: Chosun University
+        department: Department of Computer Engineering
+        location: Gwangju, Republic of Korea
+
+    - firstname: Bae
+      lastname: Junho
+      email: rfvq56@chosun.ac.kr
+      affiliation:
+        institution: Chosun University
+        department: Department of Computer Engineering
+        location: Gwangju, Republic of Korea
+
+    - firstname: Park
+      lastname: Donghyeok
+      email: ehdgur4277@chosun.ac.kr
+      affiliation:
+        institution: Chosun University
+        department: Department of Computer Engineering
+        location: Gwangju, Republic of Korea
+
+# System information
+system:
+  description:
+    # Data augmentation methods
+    # task7_3와 동일하되 gain 증강만 baby_cry/telephone_ringing 2개 클래스 제외(COND off)
+    data_augmentation: mixup, gain augmentation (off for baby_cry and telephone_ringing), spec augmentation, balanced sampling
+
+    # How the system handles catastrophic forgetting
+    catastrophic_forgetting_handling: covariance protection (CovForget), forgetting regularization, orthogonal gradient projection, null-space lora, distillation, ensemble
+
+    # Does the system explicitly predict the domain? (true/false)
+    domain_specific_components: false
+
+  # URL to the source code of the system
+  source_code: https://github.com/mulimani/dcase2026_task7_baseline
+
+# System results
+# Top-20 ensemble (val_macro), variable_len + TTA-off, active_domain_count=2
+results:
+  development_dataset:
+
+    # Accuracy after D2
+    Step2:
+      Domain2:
+        average: 83.16
+
+        # classwise
+        alarm: 73.85
+        dog_bark: 86.96
+        engine: 88.41
+        fire: 66.67
+        footsteps: 89.8
+        knocking: 86.11
+        piano: 86.6
+        speech: 86.93
+
+    # Accuracy after D3
+    Step3:
+      Domain2:
+        average: 79.14
+
+        # classwise
+        alarm: 64.62
+        dog_bark: 95.65
+        engine: 73.91
+        fire: 58.33
+        footsteps: 93.88
+        knocking: 77.78
+        piano: 85.57
+        speech: 83.42
+
+      Domain3:
+        average: 66.61
+
+        # classwise
+        alarm: 75.81
+        baby_cry: 62.5
+        dog_bark: 75.32
+        engine: 77.65
+        fire: 45.95
+        footsteps: 56.72
+        piano: 97.26
+        speech: 47.0
+        telephone_ringing: 61.29

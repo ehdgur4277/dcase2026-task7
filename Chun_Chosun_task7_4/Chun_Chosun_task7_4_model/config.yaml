@@ -1,0 +1,158 @@
+# ============================================================
+# covforget_kfold — exp13_CovForget K-Fold 앙상블
+#   exp13 설정 그대로, data_dir / d1_ckpt 경로만 로컬로 변경
+# ============================================================
+
+mode: core_bga_deltagp
+
+exp:
+  id: "covforget_kfold"
+  method: "exp13_CovForget K-Fold (Σ-cov 보호 + 망각 R penalty)"
+  date: "2026-06-11"
+  notes: "exp13 설정 기반 K=5 Stratified K-Fold 앙상블"
+
+# ── 블록 게이트 ───────────────────────────────────────────
+gate:
+  use: true
+  init_logit: 4.0
+
+# ── exp13: 활성 공분산 보호 + 망각 penalty ────────────────
+cov_forget:
+  use: true
+  cov_every: 8
+  energy: 0.95
+  k_max: 256
+  energy_protect: 0.90
+  beta: 1.0e-3
+
+# ── 도메인 시퀀스 (exp13 그대로) ─────────────────────────
+domain_defaults:
+  kd: {kd_alpha: 0.1, kd_temp: 2.0, kd_feat_weight: 0.2}
+domains:
+  - name: D2
+    drift_conv_bn: [0.0230, 0.2463, 0.2756, 0.3021, 0.5021, 0.7848]
+    drift_bn:      [0.0171, 0.0215, 0.0000, 0.0744, 0.0455, 0.0244]
+    ceiling: 128
+    lr: 1.0e-3
+    epochs: 200
+    patience: 20
+    min_epochs: 20
+    warm: false
+    kd: {kd_alpha: 0.1, kd_temp: 2.0, kd_feat_weight: 0.2}
+  - name: D3
+    drift_conv_bn: [0.2215, 0.1719, 0.1216, 0.1823, 0.2413, 0.2502]
+    drift_bn:      [0.1010, 0.0498, 0.1092, 0.1187, 0.2301, 0.2291]
+    ceiling: 80
+    lr: 2.5e-4
+    epochs: 400
+    patience: 30
+    min_epochs: 40
+    warm: true
+    kd: {kd_alpha: 0.7, kd_temp: 1.5, kd_feat_weight: 0.2}
+
+# A5000 서버 기준 경로 (로컬에서 돌릴 땐 TASK7_LORA_DATASET_DIR / D1_CKPT env로 override)
+data_dir: /data/dcase26/dataset
+d1_ckpt:  /workspace/dcase_kfold/checkpoint_D1.pth   # fallback — checkpoints/checkpoint_D1.pth 동봉본이 우선
+
+# ── 오디오 / mel ──────────────────────────────────────────
+audio:
+  sample_rate: 32000
+  mel_bins: 64
+  fmin: 50
+  fmax: 14000
+  win_size: 1024
+  hop_size: 320
+  num_classes: 10
+
+# ── 재현성 / val split ────────────────────────────────────
+seed: 1193
+val_seed: 1193
+val_ratio: 0.15
+
+# ── LoRA ──────────────────────────────────────────────────
+lora:
+  alpha: 64.0
+  tune_bn: false
+  d2_rank: 128
+  d3_rank: 64
+
+# ── 학습 공통 ─────────────────────────────────────────────
+train:
+  batch_size: 32
+  weight_decay: 1.0e-5
+  grad_clip: 1.0
+  num_workers: 4
+  lr_eta_min: 1.0e-6
+  log_every: 10
+  epochs_override: null
+  lr_d2: 1.0e-3
+  lr_d3: 2.5e-4
+  d2_epochs: 200
+  d3_epochs: 400
+
+# ── Early stopping ────────────────────────────────────────
+early_stop:
+  min_delta: 0.001
+  patience_on: macro
+  best_on: macro
+  d2_patience: 20
+  d3_patience: 30
+  d2_min_epochs: 20
+  d3_min_epochs: 40
+
+# ── KD (호환용) ───────────────────────────────────────────
+kd:
+  d1: {kd_alpha: 0.1, kd_temp: 2.0, kd_feat_weight: 0.2}
+  d2: {kd_alpha: 0.7, kd_temp: 1.5, kd_feat_weight: 0.2}
+
+# ── D1 보호 SVD ───────────────────────────────────────────
+pace:
+  p_svd_d1: 0.99
+  p_svd_d2: 0.9
+  p_svd_d3: 0.9
+  svd_eps: 1.0e-7
+
+# ── KeepLoRA ──────────────────────────────────────────────
+keeplora_binit:
+  use: true
+  eta: 0.1
+  n_batches: 4
+  align_A: false
+
+# ── 학습 트릭 ─────────────────────────────────────────────
+focal:
+  use: true
+  gamma: 2.0
+  label_smoothing: 0.05
+
+mixup:
+  use: true
+  alpha: 0.3
+  prob: 0.5
+
+spec_aug:
+  use: true
+
+tta:
+  use: false
+  gains: [1.0, 0.85, 1.15]
+
+gain_aug:
+  low: 0.7
+  high: 1.3
+
+# task7_4: gain 증강 제외 클래스 (KFOLD CLASS_LABELS 기준: baby_cry=1, telephone_ringing=9)
+cond_no_gain_classes: [1, 9]
+
+dropout: 0.2
+
+# ── Sampling ──────────────────────────────────────────────
+sampling:
+  use_balanced: true
+  hard_classes: [0, 4]
+  hard_class_multiplier: 1.0
+
+# ── Audio chunk ───────────────────────────────────────────
+chunk:
+  seconds: 4.0
+  min_seconds: 1.0

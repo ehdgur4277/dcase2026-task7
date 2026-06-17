@@ -1,0 +1,12 @@
+# Ignore everything in this directory by default.
+*
+
+# Keep walking into subdirectories so Python files can be included.
+!*/
+
+# Track source files and this ignore file.
+!*.py
+!.gitignore
+
+# Never track PyTorch checkpoint/model files.
+*.pth

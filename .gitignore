@@ -1,0 +1,13 @@
+# 체크포인트 & 가중치 (제출 zip에 미포함, repo에도 금지)
+**/*.pth
+**/*.pt
+**/*.ckpt
+**/*.npy
+**/*.pkl
+# 예측 출력 / 보고서 (소스코드 repo 제외)
+**/*.output.csv
+**/*.pdf
+# 파이썬 캐시
+**/__pycache__/
+**/*.pyc
+.DS_Store

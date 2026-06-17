@@ -1,0 +1,39 @@
+# 데이터 (용량 큼, 공유 스토리지 사용)
+data/
+datasets/
+
+# 체크포인트 & 모델 가중치
+**/checkpoint/
+**/checkpoints/
+**/*.pth
+**/*.pt
+**/*.ckpt
+
+# 결과 바이너리 (metrics.json은 추적)
+**/*.npy
+**/*.pkl
+
+# 파이썬
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# 실험 로그 (로컬 전용)
+**/logs/
+**/output/
+**/runs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CLAUDE.md
+CLAUDE.md
