@@ -8,12 +8,12 @@ submission:
 
   # Submission name
   # This name will be used in the results tables when space permits.
-  name: DCASE2026 Challenge Task 7 OR-KDL CoLoRA system
+  name: DCASE2026 Challenge Task 7 CovForget K-Fold Ensemble system (gain aug on)
 
   # Submission name abbreviated
   # This abbreviated name will be used in the results table when space is tight.
   # Use a maximum of 10 characters.
-  abbreviation: OR-KDL-CL
+  abbreviation: CovForget
 
   # Authors of the submitted system.
   # Mark authors in the order you want them to appear in submission lists.
@@ -100,7 +100,7 @@ system:
     # How the system handles catastrophic forgetting
     # Please specify all methods used (comma-separated list).
     # e.g. regularization, distillation, domain_specific_components, ...
-    catastrophic_forgetting_handling: weight-based orthogonal gradient projection, distillation, colora, block gate, k-fold ensemble
+    catastrophic_forgetting_handling: covariance protection (CovForget), forgetting regularization, orthogonal gradient projection, null-space lora, distillation, ensemble
 
     # Does the system explicitly predict the domain? (true/false)
     domain_specific_components: false
