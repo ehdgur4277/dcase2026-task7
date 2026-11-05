@@ -1,3 +1,14 @@
+# DCASE 2026 Challenge Task 7 — 2nd Place (Team Ranking)
+
+**Domain-Incremental Sound Event Classification** · Team Chun_Chosun (Chosun University)
+
+- 🥈 **2nd place** in the official team ranking
+- 🥇 System 1: **highest D1 accuracy (91%) among all participating teams** — best retention of the initial domain
+- Method: LoRA adapters on a frozen backbone + Orthogonal Gradient Projection + Knowledge Distillation (routing-free, rehearsal-free)
+- Follow-up paper: *OR-KDL: Orthogonal Knowledge-Distilled LoRA for Domain-Agnostic Incremental Learning* (submitted to ICASSP 2027)
+
+---
+
 # Chun_Chosun_task7 — DCASE 2026 Challenge Task 7 Submission
 
 This package contains the submission files for **Task 7** by Chun (Chosun University),
